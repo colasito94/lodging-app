@@ -1,6 +1,6 @@
 const express = require('express')
 const {retrieveHosts} = require("../models/hostsModel");
-const {retrieveGuests, createGuest} = require("../models/guestsModel");
+const {retrieveGuests, createGuest, updateGuestPhoneNumber} = require("../models/guestsModel");
 const {retrieveProperties, retrieveProperty} = require("../models/propertiesModel");
 const {retrieveReservations} = require("../models/reservationsModel");
 const app = express()
@@ -71,6 +71,33 @@ app.post('/guests', (req, res) => {
         req.body.email)
         .then(guest => {
             res.status(201).json(guest);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+// Update Operations
+app.put('/guests/:_guest_unique_id', (req, res) => {
+    // Initialize condition parameter/user object to be modified
+    let updated_condition = {"_guest_unique_id": req.params._guest_unique_id};  // specify id of the document to be updated
+    let property_to_updated = {};  // add properties to be updated
+    if (req.body.phone_number !== undefined) {
+        property_to_updated.phone_number = req.body.phone_number // Get new phone_number value from req boy
+    }
+    // Call update CRUD function in model layer
+    updateGuestPhoneNumber( updated_condition, property_to_updated )
+        .then(phoneNumberUpdated => {
+            if (phoneNumberUpdated === 1) {
+                res.status(200).send();
+                //TODO Fix this, maybe return JSON object to return updated tuple?
+                // res.json({_guest_unique_id: req.params._guest_unique_id, phone_number: req.body.phone_number,
+                //     name: req.body.name, address_of_guest: req.body.address_of_guest,
+                //     email: req.body.email});
+            } else {
+                res.status(500).json({Error: 'Resource not found'});
+            }
         })
         .catch(error => {
             console.error(error);
