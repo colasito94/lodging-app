@@ -1,8 +1,8 @@
 const express = require('express')
-const {retrieveHosts, retrieveHost, createHost} = require("../models/hostsModel");
+const {retrieveHosts, retrieveHost, createHost, deleteHost} = require("../models/hostsModel");
 const {retrieveGuests, createGuest, updateGuestPhoneNumber, deleteGuest, retrieveGuest} = require("../models/guestsModel");
-const {retrieveProperties, retrieveProperty, createProperty} = require("../models/propertiesModel");
-const {retrieveReservations, retrieveReservation, createReservation} = require("../models/reservationsModel");
+const {retrieveProperties, retrieveProperty, createProperty, deleteProperty} = require("../models/propertiesModel");
+const {retrieveReservations, retrieveReservation, createReservation, deleteReservation} = require("../models/reservationsModel");
 const app = express()
 const port = 3000
 app.use(express.json());
@@ -203,6 +203,52 @@ app.delete('/guests/:_guest_unique_id', (req, res) => {
             res.status(500).json({ Error: 'Request failed' });
         });
 });
+
+app.delete('/hosts/:_host_unique_id', (req, res) => {
+    deleteHost(req.params._host_unique_id)
+        .then(deletedCount => {
+            if (deletedCount === 1) {
+                res.status(204).send();
+            } else {
+                res.status(500).json({ Error: 'Resource not found' });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.delete('/properties/:_property_unique_id', (req, res) => {
+    deleteProperty(req.params._property_unique_id)
+        .then(deletedCount => {
+            if (deletedCount === 1) {
+                res.status(204).send();
+            } else {
+                res.status(500).json({ Error: 'Resource not found' });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.delete('/reservations/:_reservation_unique_id', (req, res) => {
+    deleteReservation(req.params._reservation_unique_id)
+        .then(deletedCount => {
+            if (deletedCount === 1) {
+                res.status(204).send();
+            } else {
+                res.status(500).json({ Error: 'Resource not found' });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
 
 
 app.listen(port, () => {

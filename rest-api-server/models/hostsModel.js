@@ -34,7 +34,19 @@ async function createHost( name, phone_number, email, address_of_host ) {
     }
 }
 
+async function deleteHost( host_unique_id ) {
+    try {
+        const sql = "DELETE FROM Hosts WHERE host_unique_id = (?)"
+        let inserts = [host_unique_id];
+        const rows = await query(sql, inserts);
+        return 1
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 exports.retrieveHosts = retrieveHosts;
 exports.retrieveHost = retrieveHost;
 exports.createHost = createHost;
+exports.deleteHost = deleteHost;

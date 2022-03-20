@@ -37,7 +37,19 @@ async function createProperty( property_name, bedroom_amount, bed_amount, bath_a
     }
 }
 
+async function deleteProperty( property_unique_id ) {
+    try {
+        const sql = "DELETE FROM Properties WHERE property_unique_id = (?)"
+        let inserts = [property_unique_id];
+        const rows = await query(sql, inserts);
+        return 1
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 exports.retrieveProperties = retrieveProperties;
 exports.retrieveProperty = retrieveProperty;
 exports.createProperty = createProperty;
+exports.deleteProperty = deleteProperty;

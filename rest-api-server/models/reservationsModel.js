@@ -37,7 +37,17 @@ async function createReservation( guest_unique_id, property_unique_id,
     }
 }
 
-
+async function deleteReservation( reservation_unique_id ) {
+    try {
+        const sql = "DELETE FROM Reservations WHERE reservation_unique_id = (?)"
+        let inserts = [reservation_unique_id];
+        const rows = await query(sql, inserts);
+        return 1
+    } catch (err) {
+        throw err;
+    }
+}
 exports.retrieveReservations = retrieveReservations;
 exports.retrieveReservation = retrieveReservation;
 exports.createReservation = createReservation;
+exports.deleteReservation = deleteReservation;
