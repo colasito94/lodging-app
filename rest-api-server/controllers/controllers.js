@@ -1,6 +1,6 @@
 const express = require('express')
 const {retrieveHosts} = require("../models/hostsModel");
-const {retrieveGuests, createGuest, updateGuestPhoneNumber} = require("../models/guestsModel");
+const {retrieveGuests, createGuest, updateGuestPhoneNumber, deleteGuest} = require("../models/guestsModel");
 const {retrieveProperties, retrieveProperty} = require("../models/propertiesModel");
 const {retrieveReservations} = require("../models/reservationsModel");
 const app = express()
@@ -97,6 +97,22 @@ app.put('/guests/:_guest_unique_id', (req, res) => {
                 //     email: req.body.email});
             } else {
                 res.status(500).json({Error: 'Resource not found'});
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+// DELETE Operations
+app.delete('/guests/:_guest_unique_id', (req, res) => {
+    deleteGuest(req.params._guest_unique_id)
+        .then(deletedCount => {
+            if (deletedCount === 1) {
+                res.status(204).send();
+            } else {
+                res.status(500).json({ Error: 'Resource not found' });
             }
         })
         .catch(error => {

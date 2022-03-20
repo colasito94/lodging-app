@@ -36,6 +36,18 @@ async function updateGuestPhoneNumber( update_condition, property_to_updated ) {
     }
 }
 
+async function deleteGuest( guest_unique_id ) {
+    try {
+        const sql = "DELETE FROM Guests WHERE guest_unique_id = (?)"
+        let inserts = [guest_unique_id];
+        const rows = await query(sql, inserts);
+        return 1
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.retrieveGuests = retrieveGuests;
 exports.createGuest = createGuest;
 exports.updateGuestPhoneNumber = updateGuestPhoneNumber;
+exports.deleteGuest = deleteGuest;
