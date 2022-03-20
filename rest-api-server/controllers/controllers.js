@@ -1,7 +1,7 @@
 const express = require('express')
 const {retrieveHosts} = require("../models/hostsModel");
 const {retrieveGuests, createGuest} = require("../models/guestsModel");
-const {retrieveProperties} = require("../models/propertiesModel");
+const {retrieveProperties, retrieveProperty} = require("../models/propertiesModel");
 const {retrieveReservations} = require("../models/reservationsModel");
 const app = express()
 const port = 3000
@@ -45,6 +45,18 @@ app.get('/reservations', (req, res) => {
     retrieveReservations()
         .then(reservations => {
             res.status(200).json(reservations);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.get('/properties/:_property_unique_id', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    retrieveProperty( req.params['_property_unique_id'] )
+        .then(property => {
+            res.status(200).json(property);
         })
         .catch(error => {
             console.error(error);
