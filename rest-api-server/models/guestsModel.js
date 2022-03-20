@@ -35,11 +35,33 @@ async function createGuest( phone_number, name, address_of_guest, email ) {
     }
 }
 
-async function updateGuestPhoneNumber( update_condition, property_to_updated ) {
+async function updateGuestPhoneNumber( update_condition, properties_to_updated ) {
     try {
-        const sql = "UPDATE Guests SET phone_number = (?) WHERE guest_unique_id = (?)";
-        let inserts = [property_to_updated.phone_number, update_condition._guest_unique_id];
-        const rows = await query(sql, inserts);
+        // guest attributes phone_number, name, address_of_guest, email
+        // const sql = "UPDATE Guests SET phone_number = (?) WHERE guest_unique_id = (?)";
+        let sql = ""
+        let inserts = [];
+        if (properties_to_updated.phone_number !== null) {
+            sql = "UPDATE Guests SET phone_number = (?) WHERE guest_unique_id = (?)";
+            inserts = [properties_to_updated.phone_number, update_condition._guest_unique_id];
+            await query(sql, inserts);
+        }
+        if (properties_to_updated.name !== null) {
+            sql = "UPDATE Guests SET name = (?) WHERE guest_unique_id = (?)";
+            inserts = [properties_to_updated.name, update_condition._guest_unique_id];
+            await query(sql, inserts);
+        }
+        if (properties_to_updated.address_of_guest !== null) {
+            sql = "UPDATE Guests SET address_of_guest = (?) WHERE guest_unique_id = (?)";
+            inserts = [properties_to_updated.address_of_guest, update_condition._guest_unique_id];
+            await query(sql, inserts);
+        }
+        if (properties_to_updated.email !== null) {
+            sql = "UPDATE Guests SET email = (?) WHERE guest_unique_id = (?)";
+            inserts = [properties_to_updated.email, update_condition._guest_unique_id];
+            await query(sql, inserts);
+        }
+        // let inserts = [properties_to_updated.phone_number, update_condition._guest_unique_id];
         return 1
     } catch (err) {
         throw err;

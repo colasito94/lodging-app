@@ -163,15 +163,33 @@ app.post('/reservations', (req, res) => {
 // Update Operations
 app.put('/guests/:_guest_unique_id', (req, res) => {
     // Initialize condition parameter/user object to be modified
-    let updated_condition = {"_guest_unique_id": req.params._guest_unique_id};  // specify id of the document to be updated
-    let property_to_updated = {};  // add properties to be updated
+    let update_condition = {"_guest_unique_id": req.params._guest_unique_id};  // specify id of the document to be updated
+    let properties_to_updated = {};  // add properties to be updated
+    // guest attributes - phone_number, name, address_of_guest, email
     if (req.body.phone_number !== undefined) {
-        property_to_updated.phone_number = req.body.phone_number // Get new phone_number value from req boy
+        properties_to_updated.phone_number = req.body.phone_number // Get new phone_number value from req boy
+    } else {
+        properties_to_updated.phone_number = null
+    }
+    if (req.body.name !== undefined) {
+        properties_to_updated.name = req.body.name
+    } else {
+        properties_to_updated.name = null
+    }
+    if (req.body.address_of_guest !== undefined) {
+        properties_to_updated.address_of_guest = req.body.address_of_guest
+    } else {
+        properties_to_updated.address_of_guest = null
+    }
+    if (req.body.email !== undefined) {
+        properties_to_updated.email = req.body.email
+    } else {
+        properties_to_updated.email = null
     }
     // Call update CRUD function in model layer
-    updateGuestPhoneNumber( updated_condition, property_to_updated )
-        .then(phoneNumberUpdated => {
-            if (phoneNumberUpdated === 1) {
+    updateGuestPhoneNumber( update_condition, properties_to_updated )
+        .then(numUpdated => {
+            if (numUpdated === 1) {
                 res.status(200).send();
                 //TODO Fix this, maybe return JSON object to return updated tuple?
                 // res.json({_guest_unique_id: req.params._guest_unique_id, phone_number: req.body.phone_number,
