@@ -1,6 +1,7 @@
 const {pool} = require("../dbcon");
 const util = require('util');
-const query = util.promisify(pool.query).bind(pool);  // Use util.promisify() with node SQL
+const query = util.promisify(pool.query).bind(pool);
+
 
 async function retrieveProperties() {
     try {
@@ -22,5 +23,21 @@ async function retrieveProperty ( property_unique_id ) {
     }
 }
 
+async function createProperty( property_name, bedroom_amount, bed_amount, bath_amount,
+                               capacity, price_per_night, style, host_unique_id, street_address_property ) {
+    try {
+        const sql = "INSERT INTO Properties(property_name, bedroom_amount, bed_amount, bath_amount, capacity, " +
+            "price_per_night, style, host_unique_id, street_address_property) VALUES (?)";
+        const inserts = [property_name, bedroom_amount, bed_amount, bath_amount,
+            capacity, price_per_night, style, host_unique_id, street_address_property];
+        const rows = await query(sql, [inserts]);
+        return rows
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 exports.retrieveProperties = retrieveProperties;
 exports.retrieveProperty = retrieveProperty;
+exports.createProperty = createProperty;

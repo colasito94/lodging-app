@@ -1,11 +1,22 @@
 const {pool} = require("../dbcon");
 const util = require('util');
-const query = util.promisify(pool.query).bind(pool);
+const query = util.promisify(pool.query).bind(pool);  // Use util.promisify() with node SQL
 
 
 async function retrieveGuests() {
     try {
         const rows = await query("SELECT * FROM Guests");
+        return rows
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function retrieveGuest ( guest_unique_id ) {
+    try {
+        const sql = "SELECT * FROM Guests WHERE guest_unique_id = (?)";
+        const inserts = [guest_unique_id];
+        const rows = await query(sql, [inserts]);
         return rows
     } catch (err) {
         throw err;
@@ -24,7 +35,6 @@ async function createGuest( phone_number, name, address_of_guest, email ) {
     }
 }
 
-// Update a guest's phone number
 async function updateGuestPhoneNumber( update_condition, property_to_updated ) {
     try {
         const sql = "UPDATE Guests SET phone_number = (?) WHERE guest_unique_id = (?)";
@@ -47,7 +57,9 @@ async function deleteGuest( guest_unique_id ) {
     }
 }
 
+
 exports.retrieveGuests = retrieveGuests;
+exports.retrieveGuest = retrieveGuest;
 exports.createGuest = createGuest;
 exports.updateGuestPhoneNumber = updateGuestPhoneNumber;
 exports.deleteGuest = deleteGuest;

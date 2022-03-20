@@ -1,13 +1,15 @@
 const express = require('express')
-const {retrieveHosts} = require("../models/hostsModel");
-const {retrieveGuests, createGuest, updateGuestPhoneNumber, deleteGuest} = require("../models/guestsModel");
-const {retrieveProperties, retrieveProperty} = require("../models/propertiesModel");
-const {retrieveReservations} = require("../models/reservationsModel");
+const {retrieveHosts, retrieveHost, createHost} = require("../models/hostsModel");
+const {retrieveGuests, createGuest, updateGuestPhoneNumber, deleteGuest, retrieveGuest} = require("../models/guestsModel");
+const {retrieveProperties, retrieveProperty, createProperty} = require("../models/propertiesModel");
+const {retrieveReservations, retrieveReservation, createReservation} = require("../models/reservationsModel");
 const app = express()
 const port = 3000
 app.use(express.json());
 
+
 // Retrieve Operations
+// Retrieve all entities
 app.get('/hosts', (req, res) => {
     retrieveHosts()
         .then(hosts => {
@@ -52,6 +54,8 @@ app.get('/reservations', (req, res) => {
         });
 });
 
+
+// Retrieve one entity
 app.get('/properties/:_property_unique_id', (req, res) => {
     // Initialize condition parameter/selection criteria/filter condition
     retrieveProperty( req.params['_property_unique_id'] )
@@ -63,6 +67,43 @@ app.get('/properties/:_property_unique_id', (req, res) => {
             res.status(500).json({ Error: 'Request failed' });
         });
 });
+
+app.get('/guests/:_guest_unique_id', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    retrieveGuest( req.params['_guest_unique_id'] )
+        .then(guest => {
+            res.status(200).json(guest);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.get('/hosts/:_host_unique_id', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    retrieveHost( req.params['_host_unique_id'] )
+        .then(host => {
+            res.status(200).json(host);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.get('/reservations/:_reservation_unique_id', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    retrieveReservation( req.params['_reservation_unique_id'] )
+        .then(reservation => {
+            res.status(200).json(reservation);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
 
 // Create Operations
 app.post('/guests', (req, res) => {
@@ -77,6 +118,47 @@ app.post('/guests', (req, res) => {
             res.status(500).json({ Error: 'Request failed' });
         });
 });
+
+app.post('/hosts', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    createHost(req.body.name, req.body.phone_number, req.body.email,
+        req.body.address_of_host)
+        .then(host => {
+            res.status(201).json(host);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.post('/properties', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    createProperty(req.body.property_name, req.body.bedroom_amount, req.body.bed_amount, req.body.bath_amount,
+                   req.body.capacity, req.body.price_per_night, req.body.style, req.body.host_unique_id,
+                   req.body.street_address_property)
+        .then(property => {
+            res.status(201).json(property);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
+app.post('/reservations', (req, res) => {
+    // Initialize condition parameter/selection criteria/filter condition
+    createReservation(req.body.guest_unique_id, req.body.property_unique_id,
+        req.body.date_arrive, req.body.date_leave, req.body.guest_amount, req.body.total_price)
+        .then(reservations => {
+            res.status(201).json(reservations);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ Error: 'Request failed' });
+        });
+});
+
 
 // Update Operations
 app.put('/guests/:_guest_unique_id', (req, res) => {
@@ -105,7 +187,8 @@ app.put('/guests/:_guest_unique_id', (req, res) => {
         });
 });
 
-// DELETE Operations
+
+// Delete Operations
 app.delete('/guests/:_guest_unique_id', (req, res) => {
     deleteGuest(req.params._guest_unique_id)
         .then(deletedCount => {
@@ -120,6 +203,7 @@ app.delete('/guests/:_guest_unique_id', (req, res) => {
             res.status(500).json({ Error: 'Request failed' });
         });
 });
+
 
 app.listen(port, () => {
     console.log(`Lodging app listening on port ${port}`)
