@@ -1,21 +1,14 @@
-import {useEffect} from "react";
-import HomePageViewModel from "../ViewModels/HomePageViewModel";
-import PropertiesTable from "../Components/PropertiesTable";
-
+import {Link} from "react-router-dom";
 
 function HomePage() {
-    const { properties, getProperties } = HomePageViewModel();
-    useEffect(() => {
-        getProperties()
-    }, [])
-
     return (
-        <div>
+        <>
             <h1>Lodging App</h1>
-
-            <PropertiesTable properties={properties}>
-            </PropertiesTable>
-        </div>
+            <Link class="link" to="/properties"> Properties Page </Link>
+            <Link class="link" to="/hosts"> Hosts Page </Link>
+            <Link class="link" to="/guests"> Guests Page </Link>
+            <Link class="link" to="/reservations"> Reservations Page </Link>
+        </>
     );
 }
 

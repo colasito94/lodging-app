@@ -1,11 +1,10 @@
-import React from 'react';
 import PropertyRow from "./PropertyRow.js";
 
 
 function PropertiesTable( {properties} ) {
     return (
         <div>
-            <table id="exercises">
+            <table id="properties">
                 <caption> Properties Table </caption>
                 <thead>
                     <tr>

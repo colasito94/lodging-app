@@ -1,8 +1,8 @@
 import {useState} from "react";
 
 
-function HomePageViewModel() {
-    const [properties, setProperties] = useState([]);  // useState adds React state to components
+function PropertiesViewModel() {
+    const [properties, setProperties] = useState([]);
 
     // Retrieve function
     const getProperties = async () => {
@@ -17,4 +17,4 @@ function HomePageViewModel() {
     }
 }
 
-export default HomePageViewModel;
+export default PropertiesViewModel;
