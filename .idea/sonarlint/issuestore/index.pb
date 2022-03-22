@@ -1,6 +1,4 @@
 
-H
-rest-api-server/dbcon.js,b/c/bce618dfe9e2778c9157ec2082273fd24609e11e
 Y
 )rest-api-server/models/propertiesModel.js,7/f/7f0768387cd674e4489cb117cf7a868b17b46813
 S
